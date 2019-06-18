@@ -3,7 +3,13 @@ require 'singleton'
 
 class NullPiece < Piece
   include Singleton
-  def initialize(color, board, pos)
-    super(:nil, board, pos)
+  attr_reader :type, :color
+  def initialize
+    @type = :null_piece
+    @color = :none
   end
-end
+
+  def moves
+    []
+  end
+end 

@@ -38,7 +38,7 @@ class Cursor
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
-    @selected = false
+    @selected = nil
   end
 
   def get_input
@@ -83,7 +83,18 @@ class Cursor
   def handle_key(key)
     case key
     when :space, :return
-      self.selected = !selected
+      # self.selected = !selected
+      if self.selected.nil?
+        self.selected = board[cursor_pos] unless board[cursor_pos].is_a?(NullPiece)
+      elsif !selected.moves.include?(cursor_pos) 
+        self.selected = nil
+        unless board[cursor_pos].is_a?(NullPiece)
+          self.selected = board[cursor_pos]
+        end
+      else
+        board.move_piece(selected.pos, cursor_pos.dup)
+        self.selected = nil
+      end
       return self.cursor_pos
     when :up
       update_pos(MOVES[:up])
